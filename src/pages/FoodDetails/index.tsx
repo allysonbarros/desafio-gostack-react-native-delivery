@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, {
   useEffect,
   useState,
@@ -73,7 +74,14 @@ const FoodDetails: React.FC = () => {
 
   useEffect(() => {
     async function loadFood(): Promise<void> {
-      // Load a specific food with extras based on routeParams id
+      const { data } = await api.get(`foods/${routeParams.id}`);
+      setFood(data);
+      setExtras(
+        data.extras.map((item: Extra) => {
+          item.quantity = 0;
+          return item;
+        }),
+      );
     }
 
     loadFood();
@@ -100,7 +108,9 @@ const FoodDetails: React.FC = () => {
   }, [isFavorite, food]);
 
   const cartTotal = useMemo(() => {
-    // Calculate cartTotal
+    const totalValue = 0;
+
+    return formatValue(totalValue);
   }, [extras, food, foodQuantity]);
 
   async function handleFinishOrder(): Promise<void> {

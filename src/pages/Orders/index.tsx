@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
@@ -23,7 +24,7 @@ interface Food {
   name: string;
   description: string;
   price: number;
-  formattedValue: number;
+  formattedPrice: string;
   thumbnail_url: string;
 }
 
@@ -32,7 +33,13 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     async function loadOrders(): Promise<void> {
-      // Load orders from API
+      const { data } = await api.get('orders');
+      setOrders(
+        data.map((item: Food) => {
+          item.formattedPrice = formatValue(item.price);
+          return item;
+        }),
+      );
     }
 
     loadOrders();
